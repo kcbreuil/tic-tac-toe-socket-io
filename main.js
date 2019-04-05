@@ -163,7 +163,7 @@
           message: tieMessage,
         });
         alert(tieMessage);
-        location.reload();
+        window.location.reload();
       }
     }
 
@@ -171,7 +171,7 @@
       return this.moves >= 9;
     }
 
-    // Announce the winner if the current client has won. 
+    // Announce the winner if the current client has won.
     // Broadcast this on the room to let the opponent know.
     announceWinner() {
       const message = `${player.getPlayerName()} wins!`;
@@ -180,13 +180,13 @@
         message,
       });
       alert(message);
-      location.reload();
+      window.location.reload();
     }
 
     // End the game if the other player won.
     endGame(message) {
       alert(message);
-      location.reload();
+      window.location.reload();
     }
   }
 
@@ -228,15 +228,15 @@
 	 * If player creates the game, he'll be P1(X) and has the first turn.
 	 * This event is received when opponent connects to the room.
 	 */
-  socket.on('player1', (data) => {
+  socket.on('player1', () => {
     const message = `Hello, ${player.getPlayerName()}`;
     $('#userHello').html(message);
     player.setCurrentTurn(true);
   });
 
   /**
-	 * Joined the game, so player is P2(O). 
-	 * This event is received when P2 successfully joins the game room. 
+	 * Joined the game, so player is P2(O).
+	 * This event is received when P2 successfully joins the game room.
 	 */
   socket.on('player2', (data) => {
     const message = `Hello, ${data.name}`;
@@ -249,7 +249,7 @@
 
   /**
 	 * Opponent played his turn. Update UI.
-	 * Allow the current player to play now. 
+	 * Allow the current player to play now.
 	 */
   socket.on('turnPlayed', (data) => {
     const row = data.tile.split('_')[1][0];
@@ -267,7 +267,7 @@
   });
 
   /**
-	 * End the game on any err event. 
+	 * End the game on any err event.
 	 */
   socket.on('err', (data) => {
     game.endGame(data.message);
