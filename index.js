@@ -48,6 +48,13 @@ io.on('connection', (socket) => {
   socket.on('gameEnded', (data) => {
     socket.broadcast.to(data.room).emit('gameEnd', data);
   });
+
+  /**
+   * Handle receiving chats.
+   */
+  socket.on('chat_message', (data) => {
+    io.to(data.room).emit('chat_message', { name: data.name, message: data.message });
+  });
 });
 
 server.listen(process.env.PORT || 5000);

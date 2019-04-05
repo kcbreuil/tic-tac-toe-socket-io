@@ -4,8 +4,8 @@
   let player;
   let game;
 
-  // const socket = io.connect('http://tic-tac-toe-realtime.herokuapp.com'),
-  const socket = io.connect('http://localhost:5000');
+  const socket = io.connect('https://serene-atoll-67031.herokuapp.com/');
+  // const socket = io.connect('http://localhost:5000');
 
   class Player {
     constructor(name, type) {
@@ -225,9 +225,9 @@
   });
 
   /**
-	 * If player creates the game, he'll be P1(X) and has the first turn.
-	 * This event is received when opponent connects to the room.
-	 */
+   * If player creates the game, he'll be P1(X) and has the first turn.
+   * This event is received when opponent connects to the room.
+   */
   socket.on('player1', () => {
     const message = `Hello, ${player.getPlayerName()}`;
     $('#userHello').html(message);
@@ -235,9 +235,9 @@
   });
 
   /**
-	 * Joined the game, so player is P2(O).
-	 * This event is received when P2 successfully joins the game room.
-	 */
+   * Joined the game, so player is P2(O).
+   * This event is received when P2 successfully joins the game room.
+   */
   socket.on('player2', (data) => {
     const message = `Hello, ${data.name}`;
 
@@ -248,9 +248,9 @@
   });
 
   /**
-	 * Opponent played his turn. Update UI.
-	 * Allow the current player to play now.
-	 */
+   * Opponent played his turn. Update UI.
+   * Allow the current player to play now.
+   */
   socket.on('turnPlayed', (data) => {
     const row = data.tile.split('_')[1][0];
     const col = data.tile.split('_')[1][1];
@@ -267,9 +267,26 @@
   });
 
   /**
-	 * End the game on any err event.
-	 */
+   * End the game on any err event.
+   */
   socket.on('err', (data) => {
     game.endGame(data.message);
+  });
+
+  /**
+   * Handle chat submit.
+   */
+  $('form').submit((e) => {
+    e.preventDefault(); // prevents page reloading
+    socket.emit('chat_message', { name: player.getPlayerName(), message: $('#m').val(), room: game.getRoomId() });
+    $('#m').val('');
+    return false;
+  });
+
+  /**
+   * Handle chat submit.
+   */
+  socket.on('chat_message', (data) => {
+    $('#messages').append($('<li>').text(`${data.name}: ${data.message}`));
   });
 }());
