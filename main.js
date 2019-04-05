@@ -4,8 +4,8 @@
   let player;
   let game;
 
-  const socket = io.connect('https://serene-atoll-67031.herokuapp.com/');
-  // const socket = io.connect('http://localhost:5000');
+  // const socket = io.connect('https://serene-atoll-67031.herokuapp.com/');
+  const socket = io.connect('http://localhost:5000');
 
   class Player {
     constructor(name, type) {
@@ -287,6 +287,8 @@
    * Handle chat submit.
    */
   socket.on('chat_message', (data) => {
-    $('#messages').append($('<li>').text(`${data.name}: ${data.message}`));
+    const messageBody = $('#messages');
+    messageBody.append($('<li>').text(`${data.name}: ${data.message}`));
+    messageBody.scrollTop(messageBody[0].scrollHeight);
   });
 }());
